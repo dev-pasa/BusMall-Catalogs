@@ -1,33 +1,24 @@
-body{
-  font-family: 'Courier New', Courier, monospace;
-  background-image: url('../images/salmon-cookies-3.jpg');
-}
-
-h1, h2 {
-  padding-left: 10px;
-  text-align: center;
-  font-size: 40px;
-  font-weight: bold;
-  font-family: 'Srisakdi', cursive;
-  color: rgb(74, 15, 88);
+* {
+  font-family: 'Helvetica';
 }
 
 img {
-  max-height: 210px;
-  border-radius: 20%;
-  margin: 26px;
-  border: 3px solid dimgrey;
-  box-shadow: 2px 2px 21px;
-  background-color: rgb(99, 91, 91);
-}
-div.imageList {
-  text-align: center;
-  padding-top: 50px;
+  border: 6px solid #214;
+  border-radius: 20px;
+  max-height: 200px;
+  max-width: 25%;
+  margin: 1.5%;
+  vertical-align: middle;
 }
 
-.navbar a{
-  float: right;
-  color:red;
-  text-align: center;
-  padding: 10px 10px;
+li {
+  list-style: none;
+  padding: 5px;
+  border-radius: 25px;
+  margin: 5px;
+  width: 75%;
+}
+
+section {
+  border: 2px solid red;
 }
