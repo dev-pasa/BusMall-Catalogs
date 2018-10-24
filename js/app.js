@@ -9,6 +9,8 @@ var names = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'ch
 var allProducts = []; // This is the main array of objects
 var totalClicks = 0; // Tallies the 25 clicks
 
+
+
 // DOM access
 var container = document.getElementById('image_container');
 var left = document.getElementById('left');
@@ -16,6 +18,7 @@ var center = document.getElementById('center');
 var right = document.getElementById('right');
 var productList = document.getElementById('productlist');
 var justViewed = [];
+
 
 //++++++++++++++++++++++++++++++
 // CONSTRUCTOR
@@ -42,6 +45,7 @@ for (var i = 0; i < names.length; i++) {
 // FUNCTION DECLARATIONS
 //++++++++++++++++++++++++++++++
 
+//create function to generate non-duplicates
 function makeRandom() {
   return Math.floor(Math.random() * allProducts.length);
 }
@@ -61,6 +65,7 @@ function makeThreeUnique() {
     console.log('duplicate detected on second');
     output[1] = makeRandom();
   }
+
   output.push(makeRandom()); // makes third
   while (output[0] === output[2] || output[1] === output[2]) {
     console.log('duplicate detected on third');
@@ -92,17 +97,22 @@ function handleClick(event) {
     return alert('Please click directly on an image');
   }
   totalClicks++;
-  // console.log(totalClicks, 'total clicks');
+  
+  console.log(totalClicks, 'total clicks');
 
   for(var i = 0; i < allProducts.length; i++) {
-    if (event.target.alt === allProducts[i].name){
+    if (event.target.title === allProducts[i].name){
       allProducts[i].votes++;
     }
   }
-
-  if (totalClicks === 25) {
+  
+  if(totalClicks === 25) {
+    console.log(totalClicks, 'were in if statemet');
+    
     container.removeEventListener('click', handleClick);
-    return showList();
+    // container.stopPropagation('click', handleClick)
+    return displayChart();
+    // return showList();
   }
   displayPics();
 }
@@ -113,12 +123,69 @@ function showList() {
     liEl.textContent = `${allProducts[i].name} has ${allProducts[i].views} and views and ${allProducts[i].votes} votes`;
     productList.appendChild(liEl);
   }
-  
+
 }
 
+
+function displayChart() {
+  var productNames = [];
+  var productVotes = [];
+  var productViews = [];
+
+  for (var i = 0; i < allProducts.length; i++) {
+    productNames.push(allProducts[i].name);
+    productVotes.push(allProducts[i].votes);
+    productViews.push(allProducts[i].views);
+  }
+
+
+  console.log(productVotes)
+  var ctx = document.getElementById('myChart').getContext('2d');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: names, 
+      datasets: [{
+        label: '# of Votes',
+        data: productVotes, 
+        backgroundColor: [
+          '#000000', '#FFEBCD', '#0000FF', '#8A2BE2', '#A52A2A',
+          '#DEB887', '#5F9EA0', '#7FFF00', '#FF7F50', '#6495ED',
+          '#B8860B', '#006400', '#8B008B', '#FF8C00', '#2F4F4F',
+          '#FF1493', '#FFFAF0', '#FFD700', '#008000', '#F0E68C'
+        ],
+        borderColor: '#F08080',
+        borderWidth: 2
+      }, {
+        label: '# times displayed',
+        data: productViews, 
+        borderColor: '#FFFF00',
+        borderWidth: 2
+      }]
+
+    },
+    options: {
+      scales: {
+        xAxes: [{
+          stacked: true,
+        }],
+        yAxes: [{
+          ticks: {
+            beginAtZero:true,
+            suggestedMax: 7
+          }
+        }]
+      }
+    }
+  });
+}
 //++++++++++++++++++++++++++++++
 // CODE THAT EXECUTES ON PAGE LOAD
 //++++++++++++++++++++++++++++++
 
 displayPics();
 container.addEventListener('click', handleClick);
+
+
+
