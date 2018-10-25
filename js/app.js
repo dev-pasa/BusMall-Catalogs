@@ -9,8 +9,6 @@ var names = ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'ch
 var allProducts = []; // This is the main array of objects
 var totalClicks = 0; // Tallies the 25 clicks
 
-
-
 // DOM access
 var container = document.getElementById('image_container');
 var left = document.getElementById('left');
@@ -37,9 +35,7 @@ function Product(name) {
 // INSTANCES
 //++++++++++++++++++++++++++++++
 
-for (var i = 0; i < names.length; i++) {
-  new Product(names[i]);
-}
+
 
 //++++++++++++++++++++++++++++++
 // FUNCTION DECLARATIONS
@@ -97,7 +93,6 @@ function handleClick(event) {
     return alert('Please click directly on an image');
   }
   totalClicks++;
-  
   console.log(totalClicks, 'total clicks');
 
   for(var i = 0; i < allProducts.length; i++) {
@@ -105,16 +100,17 @@ function handleClick(event) {
       allProducts[i].votes++;
     }
   }
-  
   if(totalClicks === 25) {
     console.log(totalClicks, 'were in if statemet');
-    
+
+    localStorage.setItem('pastClicked', JSON.stringify(allProducts));
+    // const data = JSON.parse(localStorage.getItem('pastClicked'));
     container.removeEventListener('click', handleClick);
-    // container.stopPropagation('click', handleClick)
-    return displayChart();
-    // return showList();
+
+    displayChart()
   }
-  displayPics();
+
+  displayPics()
 }
 
 function showList() {
@@ -126,8 +122,9 @@ function showList() {
 
 }
 
-
 function displayChart() {
+  console.log('in display chart');
+  
   var productNames = [];
   var productVotes = [];
   var productViews = [];
@@ -184,7 +181,20 @@ function displayChart() {
 // CODE THAT EXECUTES ON PAGE LOAD
 //++++++++++++++++++++++++++++++
 
-displayPics();
+if (localStorage.pastClicked){
+  var pastData = localStorage.getItem('pastClicked');
+  allProducts = JSON.parse(pastData);
+  displayChart();
+} else {
+  for (var j = 0; j < names.length; j++) {
+    new Product(names[j]);
+  }
+  container.addEventListener('click', handleClick);
+  // container.stopPropagation('click', handleClick)
+  displayPics();
+  // return displayChart();
+// return showList();
+}
 container.addEventListener('click', handleClick);
 
 
